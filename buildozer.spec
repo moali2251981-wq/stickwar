@@ -16,3 +16,12 @@ android.accept_sdk_license_agreement = True
 
 [buildozer]
 log_level = 2
+
+# استخدم API رقم 33 أو 34
+android.api = 33
+
+# حدد إصدار Build-Tools مستقر بصراحة
+android.build_tools_version = 33.0.2
+
+# حدد إصدار NDK مناسب
+android.ndk = 25b
