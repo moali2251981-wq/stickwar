@@ -24,26 +24,9 @@ jobs:
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev libffi-dev libssl-dev
           pip install --upgrade pip setuptools buildozer cython
 
-      - name: Setup Android SDK Tools & Accept Licenses
-        run: |
-          # إنشاء المجلدات المطلوبة
-          mkdir -p ~/.android
-          touch ~/.android/repositories.cfg
-          
-          # إعداد التراخيص الافتراضية
-          export ANDROID_HOME=$HOME/android-sdk
-          mkdir -p $ANDROID_HOME/licenses
-          echo -e "\n8933 low 853256a88e04a938638613b9b99120e2e5058c19" > $ANDROID_HOME/licenses/android-sdk-license
-          echo -e "\nd56f518561350f70040582d773961d2d06e0a5a0" > $ANDROID_HOME/licenses/android-sdk-preview-license
-          
-          # الموافقة الشاملة على كل التراخيص عبر Android SDK
-          yes | $ANDROID_HOME_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
       - name: Build APK with Buildozer
         run: |
-          # تشغيل البناء وتمرير الموافقة على أي حوار يظهر أثناء التثبيت
-          yes | buildozer android debug
+          buildozer android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
