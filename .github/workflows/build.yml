@@ -2,31 +2,18 @@ name: Build APK
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v5
+
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
         with:
-          python-version: '3.10'
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y python3-pip zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libtinfo6 cmake libffi-dev libssl-dev libltdl-dev
-          pip install --upgrade pip
-          pip install https://github.com/kivy/buildozer/archive/master.zip
-          pip install cython==0.29.33
-          pip install kivy
-      - name: Build APK
-        run: |
-          rm -rf ~/.buildozer
-          yes | buildozer android debug || true
-          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
-          ln -sf ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
-          chmod +x ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
-          yes | buildozer android debug
+          command: buildozer android debug
+          buildozer_version: master
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: ./bin/*.apk
+          path: bin/*.apk
