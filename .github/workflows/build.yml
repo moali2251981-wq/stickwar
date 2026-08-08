@@ -24,6 +24,18 @@ jobs:
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev libffi-dev libssl-dev
           pip install --upgrade pip setuptools buildozer cython
 
+      - name: Pre-accept Android SDK Licenses inside Buildozer
+        run: |
+          # إنشاء مجلد التراخيص داخل مسار بيئة Buildozer مباشرة
+          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
+          
+          # قبول جميع تراخيص أندرويد رسمياً بحقن الـ Hash الخاص بها
+          echo -e "\n24833b291b3e6db9680e0c8417eed2774b643861" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
+          echo -e "\n8933 low 853256a88e04a938638613b9b99120e2e5058c19" >> ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
+          echo -e "\nd56f518561350f70040582d773961d2d06e0a5a0" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-preview-license
+          echo -e "\n84831b94fe1430d05ef447d2566157a546d3873d" > ~/.buildozer/android/platform/android-sdk/licenses/android-googletv-license
+          echo -e "\n33b6a2b64fd5be1110f7352a4f3424596361a475" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-arm-dtrace-license
+
       - name: Build APK with Buildozer
         run: |
           buildozer android debug
@@ -33,3 +45,4 @@ jobs:
         with:
           name: app-release
           path: bin/*.apk
+          
